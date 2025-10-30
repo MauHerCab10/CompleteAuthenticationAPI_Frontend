@@ -1,0 +1,13 @@
+.btn-registrarse {
+  margin-top: 18px;
+  padding: 12px 30px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.btn-registrarse:hover {
+  opacity: 0.8;
+}

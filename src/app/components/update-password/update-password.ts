@@ -1,0 +1,83 @@
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+
+import { AccessService } from '../../services/access-service';
+import { UtilityService } from '../../services/utility-service';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RestablecimientoContrasena } from '../../interfaces/RestablecimientoContrasena';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+
+@Component({
+  selector: 'app-update-password',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  templateUrl: './update-password.html',
+  styleUrl: './update-password.css'
+})
+export class UpdatePasswordComponent implements OnInit {
+    constructor(
+      private _servicioUtilidad: UtilityService
+    ) { }
+
+    @Output() backToSignIn = new EventEmitter<void>();
+    @Output() submitForm = new EventEmitter<string>();
+    @Output() screenLoadingChange = new EventEmitter<boolean>();
+
+    private serviceAcceso = inject(AccessService);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    public fb = inject(FormBuilder);
+    public guidAcceso: string = '';
+
+    // Propiedades para el formulario de UpdatePassword
+    public formUpdatePassword: FormGroup = this.fb.group({
+      nuevaContrasena: ["", Validators.required],
+      confirmacionContrasena: ["", Validators.required]
+    });
+
+    // Manejar envío del formulario de UpdatePassword
+    ActualizarContrasena() {
+      this.formUpdatePassword.markAllAsTouched();
+
+      if (this.formUpdatePassword.invalid) {
+        this._servicioUtilidad.MostarAlerta("Diligencie primero todos los campos obligatorios antes de proceder", "ERROR");
+        return;
+      }
+
+      this.screenLoadingChange.emit(true);
+
+      let restablecimiento: RestablecimientoContrasena = {
+        guidAcceso: this.guidAcceso,
+        nuevaContrasena: this.formUpdatePassword.value.nuevaContrasena,
+        confirmacionContrasena: this.formUpdatePassword.value.confirmacionContrasena,
+      }
+
+      this.serviceAcceso.ActualizarContrasenaAntigua(restablecimiento).subscribe({
+        next: (respuesta) => {
+          if (respuesta.isSuccess) {
+            this.router.navigate(['inicio']);
+            this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "OK 😊");
+          } else {
+            this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "ERROR 😢");
+          }
+        },
+        error:(respuesta) => {
+          console.log(respuesta.message);
+        },
+        complete: () => {
+          this.screenLoadingChange.emit(false);
+        }
+      });
+    }
+
+    onBackToSignIn() {
+      this.backToSignIn.emit();
+      this.router.navigate(['inicio']);
+    }
+
+    ngOnInit(): void {
+      this.route.queryParams.subscribe(params => {
+        this.guidAcceso = params['guidAcceso'];
+      });
+    }
+}

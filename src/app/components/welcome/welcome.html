@@ -1,0 +1,17 @@
+<div [class.disabled]="screenLoading" class="cerrar-sesion">
+    @if (screenLoading) {
+      <div class="loader-overlay">
+        <div class="spinner"></div>
+      </div>
+    }
+
+    <h1>¡'Welcome' OK!</h1>
+
+    <button mat-raised-button color="warn" (click)="CerrarSesion()">
+        <mat-icon mat-list-icon>logout</mat-icon>Cerrar Sesión
+    </button>
+
+    <!-- <button mat-raised-button color="primary" (click)="IrAPrueba()">
+        <mat-icon>arrow_forward</mat-icon> Ir a Prueba
+    </button> -->
+</div>
