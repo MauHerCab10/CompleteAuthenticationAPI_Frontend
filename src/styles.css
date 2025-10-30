@@ -106,7 +106,8 @@ input:focus {
 
 /* INICIO Contenedor principal de elementos en pantalla */
 .page-container {
-  background: #f6f5f7;
+  background-color: #fafbfc;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,.02) 10px, rgba(0,0,0,.02) 20px);
   display: flex;
   justify-content: center;
   align-items: center;
