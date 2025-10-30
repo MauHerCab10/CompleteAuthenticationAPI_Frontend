@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { SessionTimeoutService } from '../../services/session-timeout-service';
 import { AccessService } from '../../services/access-service';
@@ -23,7 +22,6 @@ export class SignInComponent {
     private _servicioAcceso: AccessService,
     private _sessionService: SessionTimeoutService,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
   ){ }
 
   @Output() socialLogin = new EventEmitter<string>();
@@ -31,7 +29,6 @@ export class SignInComponent {
   @Output() forgotPassword = new EventEmitter<void>();
   @Output() screenLoadingChange = new EventEmitter<boolean>();
 
-  ocultarPassword: boolean = true;
   private router = inject(Router);
   public fb = inject(FormBuilder);
 

@@ -25,7 +25,6 @@ export class SignUpComponent {
   @Output() registroExitoso = new EventEmitter<void>();
   @Output() screenLoadingChange = new EventEmitter<boolean>();
 
-  ocultarPassword: boolean = true;
   private router = inject(Router);
   public fb = inject(FormBuilder);
   
