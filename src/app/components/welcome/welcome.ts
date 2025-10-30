@@ -1,17 +1,14 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { Router } from '@angular/router';
-
-//Componentes de Angular Material:
 import { MatIconModule } from '@angular/material/icon';
+
 import { UtilityService } from '../../services/utility-service';
 import { AccessService } from '../../services/access-service';
 
 @Component({
   selector: 'app-welcome',
   standalone: true,
-  imports: [
-    MatIconModule
-  ],
+  imports: [ MatIconModule ],
   templateUrl: './welcome.html',
   styleUrl: './welcome.css'
 })

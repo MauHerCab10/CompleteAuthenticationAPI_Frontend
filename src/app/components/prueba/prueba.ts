@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-prueba',
-  imports: [],
+  imports: [ MatIconModule ],
   templateUrl: './prueba.html',
   styleUrl: './prueba.css'
 })
