@@ -105,7 +105,6 @@ input:focus {
 
 
 /* INICIO Contenedor principal de elementos en pantalla */
-
 /* Estilo #1 */
 /* .page-container {
   background-color: #fafbfc;
@@ -128,8 +127,14 @@ input:focus {
   height: 100vh;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(45deg, #9eb7df 0%, #f5bee4 50%, #f1d7ff 100%);
+  
+  /* Paleta de colores #1*/
+  background: linear-gradient(45deg, #ffd6a5 0%, #ffb5a7 50%, #fcd5ce 100%);
   animation: rotateGradient 30s linear infinite;
+
+  /* Paleta de colores #2 */
+  /* background: linear-gradient(45deg, #d4fc79 0%, #96e6a1 50%, #c9f7f5 100%);
+  animation: rotateGradient 30s linear infinite; */
 }
 
 @keyframes rotateGradient {
@@ -140,7 +145,7 @@ input:focus {
 .container {
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  box-shadow: 15px 10px 100px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); /* Pos.Horizontal, Pos.Vertical, FuerzaSombra, TamañoSombra */
   position: relative;
   overflow: hidden;
   margin: 0 0 40px 0;
