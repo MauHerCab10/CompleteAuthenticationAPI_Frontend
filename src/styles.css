@@ -105,7 +105,9 @@ input:focus {
 
 
 /* INICIO Contenedor principal de elementos en pantalla */
-.page-container {
+
+/* Estilo #1 */
+/* .page-container {
   background-color: #fafbfc;
   background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,.02) 10px, rgba(0,0,0,.02) 20px);
   display: flex;
@@ -114,6 +116,25 @@ input:focus {
   flex-direction: column;
   font-family: 'Montserrat', sans-serif;
   height: 100vh;
+} */
+
+/* Estilo #2 */
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Montserrat', sans-serif;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(45deg, #9eb7df 0%, #f5bee4 50%, #f1d7ff 100%);
+  animation: rotateGradient 30s linear infinite;
+}
+
+@keyframes rotateGradient {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
 }
 
 .container {
