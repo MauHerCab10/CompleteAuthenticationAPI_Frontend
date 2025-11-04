@@ -64,9 +64,6 @@ export class SignInComponent {
           
           this.router.navigate(['inicio']);
           this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "OK 😊");
-
-          // // Iniciar la gestión del tiempo de sesión
-          // this._sessionService.startSession();
         } else {
           this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "ERROR 😢");
         }

@@ -1,73 +1,102 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, timer, Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { inject, Injectable } from '@angular/core';
+import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { UtilityService } from './utility-service';
+import { AccessService } from './access-service';
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionTimeoutService {
-  private readonly TIMEOUT_DURATION = 3 * 60 * 1000; // 3 minutos en millisegundos
-  private timeoutSubscription?: Subscription;
-  private sessionActive = new BehaviorSubject<boolean>(true);
+  private readonly idleTimeout = 15; //Tiempo de inactividad antes q inicie el contador
+  private readonly timeoutWarning = 5; //Tiempo q dura el contador antes de cerrar sesión automaticamente
   
-  public sessionActive$ = this.sessionActive.asObservable();
+  private idle = inject(Idle);
+  private router = inject(Router);
+  public screenLoading: boolean = false;
+  private isConfigured = false;
+  
+  constructor(
+    private _servicioUtilidad: UtilityService,
+    private _servicioAcceso: AccessService,
+  ) { }
 
-  constructor(private router: Router) {}
-
-  /**
-   * Inicia o reinicia el timer de timeout de sesión
-   */
-  resetTimer(): void {
-    this.clearTimer();
+  ConfigurarSessionTime() {
+    // evita duplicidad en la configuración del manejo de la sesión con Idle (Singleton)
+    if (this.isConfigured)
+      return;
     
-    this.timeoutSubscription = timer(this.TIMEOUT_DURATION).subscribe(() => {
-      this.logout();
+    this.isConfigured = true;
+
+    // Establece el tiempo de inactividad y advertencia
+    this.idle.setIdle(this.idleTimeout); //tiempo de inactividad antes de que aparezca la advertencia con la cuenta regresiva
+    this.idle.setTimeout(this.timeoutWarning); //tiempo de advertencia antes de cerrar sesión
+    this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES); //establece los eventos predeterminados que reiniciarán el temporizador de inactividad
+
+    this.idle.onIdleStart.subscribe(() => {
+      console.log('¡USUARIO INACTIVO! Ha pasado el tiempo de inactividad establecido.');
+    });
+
+    this.idle.onTimeoutWarning.subscribe((countdown) => {
+      console.log(`La sesión se cerrará en ${countdown} segundos. Por favor, interactúe con la aplicación para continuar activo.`);
+    });
+
+    this.idle.onTimeout.subscribe(() => {
+      console.log('¡Tiempo agotado! Iniciando cierre de sesión automático...');
+      this.Logout();
+    });
+
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        const token = sessionStorage.getItem('accessToken');
+        if (token) {
+          this.ResetSessionTime();
+          console.log('Tiempo de sesión reiniciado automáticamente al cambiar de pantalla.');
+        }
+      });
+  }
+
+  Logout() {
+    let accessToken:string = sessionStorage.getItem('accessToken') ?? "";
+    this.screenLoading = true;
+
+    this._servicioAcceso.CerrarSesion(accessToken).subscribe({
+      next: (respuesta) => {
+        if (respuesta.isSuccess) {
+          sessionStorage.removeItem("idUsuario");
+          sessionStorage.removeItem("accessToken");
+
+          this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "OK 😊");
+          this.router.navigate(['login']);
+
+          this.FinishSessionTime();
+        } else {
+          this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "ERROR 😢");
+        }
+      },
+      error:(respuesta) => {
+        this.screenLoading = false;
+        console.log(respuesta.message);
+        this._servicioUtilidad.MostarAlerta(`${respuesta?.error?.mensaje} ${respuesta?.message}`, "ERROR 😢");
+      },
+      complete: () => {
+        this.screenLoading = false;
+      }
     });
   }
 
-  /**
-   * Detiene el timer actual
-   */
-  private clearTimer(): void {
-    if (this.timeoutSubscription) {
-      this.timeoutSubscription.unsubscribe();
-      this.timeoutSubscription = undefined;
-    }
+  //Inicio de la sesión
+  ResetSessionTime() {
+    this.idle.watch();
+    console.log('Monitoreo de inactividad iniciado...');
   }
 
-  /**
-   * Cierra la sesión y redirige al login
-   */
-  logout(): void {
-    this.clearTimer();
-    this.sessionActive.next(false);
-    
-    // Limpiar AccessToken del SessionStorage
-    sessionStorage.removeItem('accessToken');
-    
-    // Redirigir al login
-    this.router.navigate(['/login']);
+  //Finalización de la sesión
+  FinishSessionTime() {
+    this.idle.stop();
+    console.log('¡Sesión cerrada exitosamente!');
   }
 
-  /**
-   * Inicia una nueva sesión
-   */
-  startSession(): void {
-    this.sessionActive.next(true);
-    this.resetTimer();
-  }
-
-  /**
-   * Verifica si la sesión está activa
-   */
-  isSessionActive(): boolean {
-    return this.sessionActive.value;
-  }
-
-  /**
-   * Destruye el servicio y limpia recursos
-   */
-  destroy(): void {
-    this.clearTimer();
-  }
 }

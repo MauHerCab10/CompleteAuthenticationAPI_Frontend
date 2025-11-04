@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { UtilityService } from '../../services/utility-service';
 import { AccessService } from '../../services/access-service';
+import { SessionTimeoutService } from '../../services/session-timeout-service';
 
 @Component({
   selector: 'app-welcome',
@@ -15,7 +16,8 @@ import { AccessService } from '../../services/access-service';
 export class WelcomeComponent {
   constructor(
     private _servicioUtilidad: UtilityService,
-    private _servicioAcceso: AccessService
+    private _servicioAcceso: AccessService,
+    private _sessionService: SessionTimeoutService
   ){ }
 
   public screenLoading: boolean = false;
@@ -35,8 +37,7 @@ export class WelcomeComponent {
           this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "OK 😊");
           this.router.navigate(['login']);
 
-          // // Finaliza la gestión del tiempo de sesión
-          // this._sessionService.logout();
+          this._sessionService.FinishSessionTime();
         } else {
           this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "ERROR 😢");
         }
@@ -59,6 +60,11 @@ export class WelcomeComponent {
     // Cambiar estado de pantalla por uno de "Cargando..."
   onChangeLoadingScreen(state: boolean) {
     this.screenLoading = state;
+  }
+
+  ngOnInit() {
+    this._sessionService.ConfigurarSessionTime();
+    this._sessionService.ResetSessionTime();
   }
 
 }
