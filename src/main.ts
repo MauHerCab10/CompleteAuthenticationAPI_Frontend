@@ -7,6 +7,8 @@ import { importProvidersFrom } from '@angular/core';
 import { AuthInterceptor } from './app/security/authentication-interceptor';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { NgIdleModule } from '@ng-idle/core';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 bootstrapApplication(App, {
   providers: [
@@ -15,6 +17,7 @@ bootstrapApplication(App, {
       withInterceptors([AuthInterceptor])
     ),
     importProvidersFrom(
+      MatDialogModule,
       NgIdleModule.forRoot(),
       NgIdleKeepaliveModule.forRoot()
     ),

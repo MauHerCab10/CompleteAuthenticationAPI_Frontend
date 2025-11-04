@@ -4,17 +4,21 @@ import { NavigationEnd, Router } from '@angular/router';
 import { UtilityService } from './utility-service';
 import { AccessService } from './access-service';
 import { filter } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { SessionWarningPopup } from '../components/session-warning-popup/session-warning-popup'; // ajusta la ruta
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionTimeoutService {
-  private readonly idleTimeout = 15; //Tiempo de inactividad antes q inicie el contador
-  private readonly timeoutWarning = 5; //Tiempo q dura el contador antes de cerrar sesión automaticamente
+  private readonly idleTimeout = 180; //Tiempo (segs) de inactividad antes q inicie el contador de cierre de sesión automático
+  private readonly timeoutWarning = 30; //Tiempo (segs) q dura el contador antes de cerrar la sesión automaticamente
   
   private idle = inject(Idle);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
   public screenLoading: boolean = false;
+  private warningPopupRef: any = null;
   private isConfigured = false;
   
   constructor(
@@ -35,16 +39,18 @@ export class SessionTimeoutService {
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES); //establece los eventos predeterminados que reiniciarán el temporizador de inactividad
 
     this.idle.onIdleStart.subscribe(() => {
-      console.log('¡USUARIO INACTIVO! Ha pasado el tiempo de inactividad establecido.');
+      // console.log('¡USUARIO INACTIVO! Ha pasado el tiempo de inactividad establecido.');
     });
 
     this.idle.onTimeoutWarning.subscribe((countdown) => {
-      console.log(`La sesión se cerrará en ${countdown} segundos. Por favor, interactúe con la aplicación para continuar activo.`);
+      // console.log(`La sesión se cerrará en ${countdown} segundos. Por favor, interactúe con la aplicación para continuar activo.`);
+      this.MostrarPopupAdvertencia(countdown);
     });
 
     this.idle.onTimeout.subscribe(() => {
-      console.log('¡Tiempo agotado! Iniciando cierre de sesión automático...');
-      this.Logout();
+      // console.log('¡Tiempo agotado! Iniciando cierre de sesión automático...');
+      this.CerrarPopupAdvertencia();
+      this.LogoutAutomatico();
     });
 
     this.router.events
@@ -53,12 +59,12 @@ export class SessionTimeoutService {
         const token = sessionStorage.getItem('accessToken');
         if (token) {
           this.ResetSessionTime();
-          console.log('Tiempo de sesión reiniciado automáticamente al cambiar de pantalla.');
+          // console.log('Tiempo de sesión reiniciado automáticamente al cambiar de pantalla.');
         }
       });
   }
 
-  Logout() {
+  LogoutAutomatico() {
     let accessToken:string = sessionStorage.getItem('accessToken') ?? "";
     this.screenLoading = true;
 
@@ -90,13 +96,42 @@ export class SessionTimeoutService {
   //Inicio de la sesión
   ResetSessionTime() {
     this.idle.watch();
-    console.log('Monitoreo de inactividad iniciado...');
+    // console.log('Monitoreo de inactividad iniciado...');
+    this.CerrarPopupAdvertencia();
   }
 
   //Finalización de la sesión
   FinishSessionTime() {
     this.idle.stop();
-    console.log('¡Sesión cerrada exitosamente!');
+    // console.log('¡Sesión cerrada exitosamente!');
+    this.CerrarPopupAdvertencia();
+  }
+
+  MostrarPopupAdvertencia(countdown: number) {
+    if (this.warningPopupRef) {
+      this.warningPopupRef.componentInstance.data.countdown = countdown;
+      return;
+    }
+
+    this.warningPopupRef = this.dialog.open(SessionWarningPopup, {
+      disableClose: true,
+      data: { countdown }
+    });
+
+    this.warningPopupRef.afterClosed().subscribe((continuar: boolean) => {
+      if (continuar) {
+        this.ResetSessionTime();
+        // console.log('El usuario decidió continuar con la sesión activa.');
+      }
+      this.warningPopupRef = null;
+    });
+  }
+
+  CerrarPopupAdvertencia() {
+    if (this.warningPopupRef) {
+      this.warningPopupRef.close();
+      this.warningPopupRef = null;
+    }
   }
 
 }

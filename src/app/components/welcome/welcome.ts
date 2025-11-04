@@ -57,7 +57,7 @@ export class WelcomeComponent {
     this.router.navigate(['prueba']);
   }
 
-    // Cambiar estado de pantalla por uno de "Cargando..."
+  // Cambiar estado de pantalla por uno de "Cargando..."
   onChangeLoadingScreen(state: boolean) {
     this.screenLoading = state;
   }
