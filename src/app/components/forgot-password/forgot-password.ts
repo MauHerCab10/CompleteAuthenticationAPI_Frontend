@@ -47,7 +47,7 @@ export class ForgotPasswordComponent {
     this.serviceAcceso.OlvidoSuContrasena(email).subscribe({
       next: (respuesta) => {
         if (respuesta.isSuccess) {
-          this.router.navigate(['inicio']);
+          this.router.navigate(['login']);
           this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "OK 😊");
         } else {
           this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "ERROR 😢");

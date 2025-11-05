@@ -238,6 +238,7 @@
   font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
   display: flex !important;
   align-items: center !important;
+  /* rotate: 180deg; */
 }
 
 .cerrar-sesion button:hover:not(:disabled) mat-icon {

@@ -55,7 +55,7 @@ export class UpdatePasswordComponent implements OnInit {
       this.serviceAcceso.ActualizarContrasenaAntigua(restablecimiento).subscribe({
         next: (respuesta) => {
           if (respuesta.isSuccess) {
-            this.router.navigate(['inicio']);
+            this.router.navigate(['login']);
             this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "OK 😊");
           } else {
             this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "ERROR 😢");
@@ -73,8 +73,7 @@ export class UpdatePasswordComponent implements OnInit {
     }
 
     onBackToSignIn() {
-      this.backToSignIn.emit();
-      this.router.navigate(['inicio']);
+      this.router.navigate(['login']);
     }
 
     ngOnInit(): void {

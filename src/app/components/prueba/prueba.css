@@ -165,11 +165,9 @@ button[mat-raised-button] mat-icon {
   font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
   display: flex !important;
   align-items: center !important;
-  transform: rotate(180deg);
 }
 
 button[mat-raised-button]:hover mat-icon {
-  transform: rotate(180deg) scale(1.15);
   font-variation-settings: 'FILL' 0, 'wght' 700, 'GRAD' 0, 'opsz' 24;
 }
 
