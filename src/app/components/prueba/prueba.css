@@ -1,13 +1,21 @@
 :host {
+  display: block;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+}
+
+.pruebas {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  font-family: 'Poppins', sans-serif;
+  padding: 2rem;
+  position: relative;
 }
 
-div {
+.contenedor-principal {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(12px);
   border-radius: 1.5rem;
@@ -34,7 +42,7 @@ div {
   }
 }
 
-div:hover {
+.contenedor-principal:hover {
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
 }
 
@@ -168,6 +176,7 @@ button[mat-raised-button] mat-icon {
 }
 
 button[mat-raised-button]:hover mat-icon {
+  transform: scale(1.15);
   font-variation-settings: 'FILL' 0, 'wght' 700, 'GRAD' 0, 'opsz' 24;
 }
 
@@ -226,5 +235,26 @@ button[mat-raised-button]:last-of-type {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+.pruebas.disabled {
+  pointer-events: none;
+  filter: blur(3px);
+}
+
+.pruebas.disabled .contenedor-principal {
+  opacity: 0.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contenedor-principal {
+    padding: 2rem;
+    margin: 1rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
   }
 }
