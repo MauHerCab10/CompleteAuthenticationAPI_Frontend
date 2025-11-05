@@ -26,7 +26,7 @@ export class SessionTimeoutService {
     private _servicioAcceso: AccessService,
   ) { }
 
-  ConfigurarSessionTime() {
+  ConfigurarSessionTimer() {
     // evita duplicidad en la configuración del manejo de la sesión con Idle (Singleton)
     if (this.isConfigured)
       return;
@@ -58,7 +58,7 @@ export class SessionTimeoutService {
       .subscribe((event: any) => {
         const token = sessionStorage.getItem('accessToken');
         if (token) {
-          this.ResetSessionTime();
+          this.ResetSessionTimer();
           // console.log('Tiempo de sesión reiniciado automáticamente al cambiar de pantalla.');
         }
       });
@@ -77,7 +77,7 @@ export class SessionTimeoutService {
           this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "OK 😊");
           this.router.navigate(['login']);
 
-          this.FinishSessionTime();
+          this.FinishSessionTimer();
         } else {
           this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "ERROR 😢");
         }
@@ -92,21 +92,7 @@ export class SessionTimeoutService {
       }
     });
   }
-
-  //Inicio de la sesión
-  ResetSessionTime() {
-    this.idle.watch();
-    // console.log('Monitoreo de inactividad iniciado...');
-    this.CerrarPopupAdvertencia();
-  }
-
-  //Finalización de la sesión
-  FinishSessionTime() {
-    this.idle.stop();
-    // console.log('¡Sesión cerrada exitosamente!');
-    this.CerrarPopupAdvertencia();
-  }
-
+  
   MostrarPopupAdvertencia(countdown: number) {
     if (this.warningPopupRef) {
       this.warningPopupRef.componentInstance.data.countdown = countdown;
@@ -120,7 +106,7 @@ export class SessionTimeoutService {
 
     this.warningPopupRef.afterClosed().subscribe((continuar: boolean) => {
       if (continuar) {
-        this.ResetSessionTime();
+        this.ResetSessionTimer();
         // console.log('El usuario decidió continuar con la sesión activa.');
       }
       this.warningPopupRef = null;
@@ -131,6 +117,37 @@ export class SessionTimeoutService {
     if (this.warningPopupRef) {
       this.warningPopupRef.close();
       this.warningPopupRef = null;
+    }
+  }
+
+  //Inicializa el temporizador de sesión
+  ResetSessionTimer() {
+    this.idle.watch();
+    // console.log('Monitoreo de inactividad iniciado...');
+    this.CerrarPopupAdvertencia();
+  }
+
+  //Finalización del temporizador de sesión
+  FinishSessionTimer() {
+    this.idle.stop();
+    // console.log('¡Sesión cerrada exitosamente!');
+    this.CerrarPopupAdvertencia();
+  }
+
+  //Pausa el temporizador de sesión
+  PauseSessionTimer() {
+    try {
+      this.idle.stop();
+      // console.log('⏸️ Temporizador de inactividad pausado por algún proceso del sistema.');
+    } catch {}
+  }
+
+  //Reanuda el temporizador de sesión
+  ResumeSessionTimer() {
+    const token = sessionStorage.getItem('accessToken');
+    if (token) {
+      this.ResetSessionTimer();
+      // console.log('▶️ Temporizador de inactividad reanudado.');
     }
   }
 

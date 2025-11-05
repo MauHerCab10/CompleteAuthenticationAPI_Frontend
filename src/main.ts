@@ -5,6 +5,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app/app.routes';
 import { importProvidersFrom } from '@angular/core';
 import { AuthInterceptor } from './app/security/authentication-interceptor';
+import { ActivityInterceptor } from './app/security/activity-interceptor';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { NgIdleModule } from '@ng-idle/core';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -14,7 +15,7 @@ bootstrapApplication(App, {
   providers: [
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([AuthInterceptor])
+      withInterceptors([AuthInterceptor, ActivityInterceptor])
     ),
     importProvidersFrom(
       MatDialogModule,

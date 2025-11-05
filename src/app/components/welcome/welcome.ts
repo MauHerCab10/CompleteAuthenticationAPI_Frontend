@@ -34,7 +34,7 @@ export class WelcomeComponent {
           sessionStorage.removeItem("accessToken");
 
           this.router.navigate(['login']);
-          this._sessionService.FinishSessionTime();
+          this._sessionService.FinishSessionTimer();
           this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "OK 😊");
         } else {
           this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "ERROR 😢");
@@ -57,8 +57,8 @@ export class WelcomeComponent {
   }
 
   ngOnInit() {
-    this._sessionService.ConfigurarSessionTime();
-    this._sessionService.ResetSessionTime();
+    this._sessionService.ConfigurarSessionTimer();
+    this._sessionService.ResetSessionTimer();
   }
 
 }
