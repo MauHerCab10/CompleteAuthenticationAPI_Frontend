@@ -70,7 +70,7 @@ export class AccessService {
     return respuesta;
   }
 
-  //solo para PRUEBAS
+  //solo para PRUEBAS (Nunca para PRODUCCIÓN)
   Ping(accessToken:string): Observable<RespuestaUsuario>
   {
     var respuesta = this.http.get<RespuestaUsuario>(`${this.baseUrl}Ping`, {
@@ -78,7 +78,6 @@ export class AccessService {
         Authorization: `Bearer ${accessToken}`
       }, withCredentials: true
     });
-	console.log(respuesta);
     return respuesta;
   }
 

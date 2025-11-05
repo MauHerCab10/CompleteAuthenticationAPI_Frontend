@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -25,7 +25,6 @@ export class WelcomeComponent {
 
   CerrarSesion(){
     let accessToken:string = sessionStorage.getItem('accessToken') ?? "";
-
     this.screenLoading = true;
 
     this._servicioAcceso.CerrarSesion(accessToken).subscribe({
@@ -34,18 +33,18 @@ export class WelcomeComponent {
           sessionStorage.removeItem("idUsuario");
           sessionStorage.removeItem("accessToken");
 
-          this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "OK 😊");
           this.router.navigate(['login']);
-
           this._sessionService.FinishSessionTime();
+          this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "OK 😊");
         } else {
           this._servicioUtilidad.MostarAlerta(`${respuesta.mensaje}`, "ERROR 😢");
         }
       },
       error:(respuesta) => {
         this.screenLoading = false;
-        console.log(respuesta.message);
+        this.router.navigate(['login']);
         this._servicioUtilidad.MostarAlerta(`${respuesta?.error?.mensaje} ${respuesta?.message}`, "ERROR 😢");
+        console.log(respuesta.message);
       },
       complete: () => {
         this.screenLoading = false;
@@ -55,11 +54,6 @@ export class WelcomeComponent {
 
   IrAPrueba(){
     this.router.navigate(['prueba']);
-  }
-
-  // Cambiar estado de pantalla por uno de "Cargando..."
-  onChangeLoadingScreen(state: boolean) {
-    this.screenLoading = state;
   }
 
   ngOnInit() {

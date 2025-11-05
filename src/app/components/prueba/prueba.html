@@ -1,5 +1,15 @@
-<div>
+<div [class.disabled]="screenLoading" class="pruebas">
+    @if (screenLoading) {
+      <div class="loader-overlay">
+        <div class="spinner"></div>
+      </div>
+    }
+    
     <h1>¡'Prueba' OK!</h1>
+
+    <button mat-raised-button color="warn" (click)="Ping()">
+        Ping
+    </button>
 
     <button mat-raised-button color="primary" (click)="RegresarAInicio()">
         <mat-icon>arrow_forward</mat-icon>Regresar a Inicio
