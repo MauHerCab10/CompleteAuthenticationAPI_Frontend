@@ -3,6 +3,7 @@ import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { UtilityService } from './utility-service';
 import { AccessService } from './access-service';
+import { LoadingService } from './loading-service';
 import { filter } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionWarningPopup } from '../components/session-warning-popup/session-warning-popup'; // ajusta la ruta
@@ -24,6 +25,7 @@ export class SessionTimeoutService {
   constructor(
     private _servicioUtilidad: UtilityService,
     private _servicioAcceso: AccessService,
+    private _servicioLoading: LoadingService
   ) { }
 
   ConfigurarSessionTimer() {
@@ -65,9 +67,9 @@ export class SessionTimeoutService {
   }
 
   LogoutAutomatico() {
+    this._servicioLoading.Show();
     let accessToken:string = sessionStorage.getItem('accessToken') ?? "";
-    this.screenLoading = true;
-
+    
     this._servicioAcceso.CerrarSesion(accessToken).subscribe({
       next: (respuesta) => {
         if (respuesta.isSuccess) {
@@ -83,12 +85,12 @@ export class SessionTimeoutService {
         }
       },
       error:(respuesta) => {
-        this.screenLoading = false;
+        this._servicioLoading.Hide();
         console.log(respuesta.message);
         this._servicioUtilidad.MostarAlerta(`${respuesta?.error?.mensaje} ${respuesta?.message}`, "ERROR 😢");
       },
       complete: () => {
-        this.screenLoading = false;
+        this._servicioLoading.Hide();
       }
     });
   }

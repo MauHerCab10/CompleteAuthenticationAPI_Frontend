@@ -24,8 +24,8 @@ export class WelcomeComponent {
   private router = inject(Router);
 
   CerrarSesion(){
-    let accessToken:string = sessionStorage.getItem('accessToken') ?? "";
     this.screenLoading = true;
+    let accessToken:string = sessionStorage.getItem('accessToken') ?? "";
 
     this._servicioAcceso.CerrarSesion(accessToken).subscribe({
       next: (respuesta) => {

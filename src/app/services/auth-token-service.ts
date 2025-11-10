@@ -7,7 +7,7 @@ export class AuthTokenService {
 
   constructor() { }
 
-  //Almacenamiento solo en memoria dentro de una variable normal del runtime Angular
+  //Almacenamiento solo en memoria dentro de una variable normal del runtime Angular (NO IMPLEMENTADO)
   private accessToken: string | null = null;
   private idUsuario: string | null = null;
 
