@@ -38,7 +38,7 @@ export class AuthComponent {
     this.isForgotPasswordMode = true;
   }
 
-  // Volver a SignIn desde ForgotPassword
+  // Volver a SignIn desde ForgotPassword o desde UpdatePassword
   onBackToSignIn() {
     this.isForgotPasswordMode = false;
     this.isUpdatePasswordMode = false;

@@ -32,14 +32,13 @@ export class SignInComponent {
   private router = inject(Router);
   public fb = inject(FormBuilder);
 
-  // Propiedades para el formulario de SignIn
   public formSignIn: FormGroup = this.fb.group({
     email: ["", Validators.required],
     contrasena: ["", Validators.required],
   });
 
 
-  // Manejar envío del formulario de SignIn
+  //Permite al usuario iniciar sesión en el sistema
   IniciarSesion(){
     this.formSignIn.markAllAsTouched();
 
@@ -86,11 +85,12 @@ export class SignInComponent {
     // implementar lógica para procesar el Login con redes sociales
   }
 
-  // Manejar forgot password
+  //Se visualiza el componente de recuperación de contraseña
   onForgotPassword() {
     this.forgotPassword.emit();
   }
 
+  // Manejar QueryParams para confirmación de cuenta desde el correo q recibe el usuario
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params['confirmacion'] === 'ok') {

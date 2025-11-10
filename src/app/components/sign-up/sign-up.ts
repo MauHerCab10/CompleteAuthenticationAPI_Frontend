@@ -25,17 +25,15 @@ export class SignUpComponent {
   @Output() registroExitoso = new EventEmitter<void>();
   @Output() screenLoadingChange = new EventEmitter<boolean>();
 
-  private router = inject(Router);
   public fb = inject(FormBuilder);
   
-  // Propiedades para el formulario de SignUp
   public formSignUp: FormGroup = this.fb.group({
     nombreApellido: ["", Validators.required],
     email: ["", Validators.required],
     contrasena: ["", Validators.required],
   });
 
-
+  //Permite al usuario registrarse en el sistema
   RegistrarUsuario(){
     this.formSignUp.markAllAsTouched();
 
@@ -72,11 +70,11 @@ export class SignUpComponent {
     });
   }
 
-  // Manejar el Login con Redes Sociales
+  // Manejar el Registro con Redes Sociales
   onSocialLogin(provider: string) {
-    console.log(`Login desde SignUp con ${provider}`);
+    console.log(`Registro desde SignUp con ${provider}`);
     this.socialLogin.emit(provider);
-    // implementar lógica para procesar el Login con redes sociales
+    // implementar lógica para procesar el Registro con redes sociales
   }
 
 }

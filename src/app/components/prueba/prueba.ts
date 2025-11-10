@@ -18,6 +18,7 @@ export class Prueba {
   public screenLoading: boolean = false;
   private router = inject(Router);
 
+  //Realiza el envío de una petición de prueba al servidor para verificar q el token sea válido, q la sesión se encuentre activa y si es el servidor se enuentra arriba como para responder satisfactoriamente a la solicitud
   Ping(){
     let accessToken:string = sessionStorage.getItem('accessToken') ?? "";
     this.screenLoading = true;

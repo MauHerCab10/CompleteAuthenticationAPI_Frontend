@@ -28,6 +28,7 @@ export class SessionTimeoutService {
     private _servicioLoading: LoadingService
   ) { }
 
+  //Configuración del temporizador de la sesión del usuario
   ConfigurarSessionTimer() {
     // evita duplicidad en la configuración del manejo de la sesión con Idle (Singleton)
     if (this.isConfigured)
@@ -66,6 +67,7 @@ export class SessionTimeoutService {
       });
   }
 
+  //Cierre de sesión automático por inactividad por parte del usuario
   LogoutAutomatico() {
     this._servicioLoading.Show();
     let accessToken:string = sessionStorage.getItem('accessToken') ?? "";
@@ -95,6 +97,7 @@ export class SessionTimeoutService {
     });
   }
   
+  //Muestra el popup de advertencia de cierre de sesión al usuario
   MostrarPopupAdvertencia(countdown: number) {
     if (this.warningPopupRef) {
       this.warningPopupRef.componentInstance.data.countdown = countdown;
@@ -115,6 +118,7 @@ export class SessionTimeoutService {
     });
   }
 
+  //Cierra el popup de advertencia de cierre de sesión
   CerrarPopupAdvertencia() {
     if (this.warningPopupRef) {
       this.warningPopupRef.close();

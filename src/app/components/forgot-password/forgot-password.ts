@@ -26,12 +26,11 @@ export class ForgotPasswordComponent {
   private router = inject(Router);
   public fb = inject(FormBuilder);
 
-  // Propiedades para el formulario de ForgotPassword
   public formForgotPassword: FormGroup = this.fb.group({
     email: ["", Validators.required]
   });
 
-  // Manejar envío del formulario de ForgotPassword
+  //Envía la solicitud de recuperación de contraseña
   OlvidoSuContrasena() {
     this.formForgotPassword.markAllAsTouched();
 

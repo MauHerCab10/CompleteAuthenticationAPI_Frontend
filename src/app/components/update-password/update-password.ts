@@ -29,13 +29,12 @@ export class UpdatePasswordComponent implements OnInit {
     public fb = inject(FormBuilder);
     public guidAcceso: string = '';
 
-    // Propiedades para el formulario de UpdatePassword
     public formUpdatePassword: FormGroup = this.fb.group({
       nuevaContrasena: ["", Validators.required],
       confirmacionContrasena: ["", Validators.required]
     });
 
-    // Manejar envío del formulario de UpdatePassword
+    //Permite al usuario actualizar su contraseña antigüa
     ActualizarContrasena() {
       this.formUpdatePassword.markAllAsTouched();
 

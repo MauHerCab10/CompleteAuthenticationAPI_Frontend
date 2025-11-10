@@ -23,6 +23,7 @@ export class WelcomeComponent {
   public screenLoading: boolean = false;
   private router = inject(Router);
 
+  //Permite al usuario cerrar su sesión en el sistema
   CerrarSesion(){
     this.screenLoading = true;
     let accessToken:string = sessionStorage.getItem('accessToken') ?? "";

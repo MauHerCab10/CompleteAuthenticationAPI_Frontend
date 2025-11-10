@@ -23,6 +23,7 @@ export class AuthTokenService {
   ClearAccessToken() {
     this.accessToken = null;
   }
+  //Access Token
 
   //Id Usuario
   SetIdUsuario(pIdUsuario: string) {
@@ -36,4 +37,6 @@ export class AuthTokenService {
   ClearIdUsuario() {
     this.idUsuario = null;
   }
+  //Id Usuario
+  
 }
