@@ -8,7 +8,7 @@ export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' }, /* http://localhost:4200/ */
     { path: 'login', component: AuthComponent },
     { path: "registro", component: AuthComponent },
-    { path: 'password', component: AuthComponent }, //le debo crear un GuidGuard
+    { path: 'password', component: AuthComponent },
     { path: 'inicio', component: WelcomeComponent, canActivate: [AuthenticationGuard] },
     { path: 'prueba', component: Prueba, canActivate: [AuthenticationGuard] }
 ];
